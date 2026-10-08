@@ -5,7 +5,13 @@ export interface SortField {
   order: 'asc' | 'desc';
 }
 
+export interface ParseSortPipeOptions {
+  allowedFields?: string[];
+}
+
 export class ParseSortPipe implements PipeTransform<string, SortField[]> {
+  constructor(private readonly options: ParseSortPipeOptions = {}) {}
+
   transform(value: string | undefined): SortField[] {
     if (!value?.trim()) {
       return [];
@@ -16,6 +22,10 @@ export class ParseSortPipe implements PipeTransform<string, SortField[]> {
         throw new BadRequestException(
           `Invalid sort direction "${order}" for field "${field}"`,
         );
+      }
+      const { allowedFields } = this.options;
+      if (allowedFields && !allowedFields.includes(field)) {
+        throw new BadRequestException(`Sorting by "${field}" is not allowed`);
       }
       return { field, order };
     });
