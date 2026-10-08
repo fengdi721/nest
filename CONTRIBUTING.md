@@ -216,7 +216,7 @@ To ensure consistency throughout the source code, keep these rules in mind as yo
 
 - All features or bug fixes **must be tested** by one or more specs (unit tests).
 - We follow [Google's JavaScript Style Guide][js-style-guide], but wrap all code at
-  **100 characters**. An automated formatter is available (`npm run format`).
+  **80 characters**. An automated formatter is available (`npm run format`).
 
 ## <a name="commit"></a> Commit Message Guidelines
 
@@ -239,8 +239,9 @@ format that includes a **type**, a **scope** and a **subject**:
 
 The **header** is mandatory and the **scope** of the header is optional.
 
-Any line of the commit message cannot be longer than 100 characters! This allows the message to be easier
-to read on GitHub as well as in various git tools.
+The header cannot be longer than 72 characters, and any other line of the commit message cannot be
+longer than 100 characters! This allows the message to be easier to read on GitHub as well as in
+various git tools.
 
 Footer should contain a [closing reference to an issue](https://help.github.com/articles/closing-issues-via-commit-messages/) if any.
 
