@@ -1,4 +1,4 @@
-import { PipeTransform } from '@nestjs/common';
+import { BadRequestException, PipeTransform } from '@nestjs/common';
 
 export interface SortField {
   field: string;
@@ -12,7 +12,12 @@ export class ParseSortPipe implements PipeTransform<string, SortField[]> {
     }
     return value.split(',').map(part => {
       const [field, order = 'asc'] = part.split(':').map(s => s.trim());
-      return { field, order: order as SortField['order'] };
+      if (order !== 'asc' && order !== 'desc') {
+        throw new BadRequestException(
+          `Invalid sort direction "${order}" for field "${field}"`,
+        );
+      }
+      return { field, order };
     });
   }
 }
