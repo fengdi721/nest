@@ -65,5 +65,11 @@ describe('ParseSortPipe', () => {
         );
       });
     });
+
+    it('should reject the same field given twice', () => {
+      expect(() => pipe.transform('name:asc,name:desc')).toThrow(
+        'Duplicate sort field "name"',
+      );
+    });
   });
 });
