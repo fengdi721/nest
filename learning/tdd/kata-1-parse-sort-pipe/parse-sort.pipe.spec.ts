@@ -17,5 +17,12 @@ describe('ParseSortPipe', () => {
         { field: 'name', order: 'desc' },
       ]);
     });
+
+    it('should parse several comma-separated fields in order', () => {
+      expect(pipe.transform('name:asc,createdAt:desc')).toEqual([
+        { field: 'name', order: 'asc' },
+        { field: 'createdAt', order: 'desc' },
+      ]);
+    });
   });
 });
