@@ -64,3 +64,24 @@ Tick each box as you finish it, and commit the change to this file
 - [ ] **P14. First real contribution.** Docs typo/clarification in
       `nestjs/docs.nestjs.com`, a missing test upstream, or a confirmed
       reproduction comment on a `needs triage` issue.
+
+## 第五阶段：从报错倒推源码 & 调试（配合 05 文档 + specs/07）
+
+- [ ] **P15. 三次 grep 定位。** 不看文档，自己从
+      `Nest can't resolve dependencies` 一路 grep 到 `injector.ts` 里抛异常的那一行，
+      把每一步的命令和结果写进 JOURNAL.md。
+- [ ] **P16. 在自己的工作项目里用 `NEST_DEBUG=1` 启动一次。** 挑一个依赖层级较深的
+      service，对照日志画出它的查找路径（先本模块 → 再 imports）。
+- [ ] **P17. 换一个报错再倒推一次。** 故意在 `specs/02` 里制造循环依赖
+      （A ↔ B，不用 forwardRef），用同样的方法找到报错的出处
+      （提示：`packages/core/errors/exceptions/` 下找）。
+- [ ] **P18. 准备第一个上游 PR（只做到本地，先不提交到 nestjs）：**
+      1. `git fetch upstream && git checkout -b test/unknown-deps-property-message upstream/master`
+      2. 在 `packages/core/test/errors/test/messages.spec.ts` 的 `UNKNOWN_DEPENDENCIES_MESSAGE`
+         `describe` 里，**模仿已有用例的写法**，为“属性注入”分支（`index` 为 `undefined`、
+         `key: 'cache'`）加一个测试
+      3. `npx vitest run packages/core/test/errors` 通过
+      4. 提交信息：`test(core): cover property-based unknown dependency message`
+      5. 推到自己的 fork，**向自己 fork 的 master** 开 PR 演练一遍模板
+      6. 先 `gh pr list --repo nestjs/nest --search "messages.spec"` 确认没人在做，
+         然后再决定是否向上游提交（下一步一起做）

@@ -8,6 +8,8 @@ It lives on the branch `learning/first-steps` of my fork
 upstream PR; real contributions go on their own branches cut from a fresh
 `upstream/master` (see [04-CONTRIBUTION-WORKFLOW.md](04-CONTRIBUTION-WORKFLOW.md)).
 
+> 从第 2 步（05）开始，文档使用中文编写。
+
 ## Roadmap
 
 | #   | Read                                                         | Then run / do                                     |
@@ -16,6 +18,7 @@ upstream PR; real contributions go on their own branches cut from a fresh
 | 2   | [02-HOW-NEST-BOOTS.md](02-HOW-NEST-BOOTS.md): `NestFactory.create()` traced through the source | `specs/01`, `02`, `03`, `05`, then P4–P6 |
 | 3   | [03-TESTING.md](03-TESTING.md): unit, integration, samples; how upstream tests things | `specs/04`, exercises E1–E4, P7–P9          |
 | 4   | [04-CONTRIBUTION-WORKFLOW.md](04-CONTRIBUTION-WORKFLOW.md): fork → branch → commit → PR → review | `specs/06` (real issue triage), P10–P14   |
+| 5   | [05-DI-LOOKUP-AND-DEBUG.md](05-DI-LOOKUP-AND-DEBUG.md) (中文): 从报错倒推源码、依赖查找算法、`NEST_DEBUG` | `specs/07`, P15–P18 |
 | ∞   | [JOURNAL.md](JOURNAL.md): log of every session, finding and test written | keep adding to it                                  |
 
 ## Running everything
@@ -45,6 +48,7 @@ learning/
 ├── 02-HOW-NEST-BOOTS.md          bootstrap walkthrough with file:line pointers
 ├── 03-TESTING.md                 test strategy of the project
 ├── 04-CONTRIBUTION-WORKFLOW.md   git/GitHub process, conventions, etiquette
+├── 05-DI-LOOKUP-AND-DEBUG.md     (中文) 从报错倒推源码 / 依赖查找 / NEST_DEBUG
 ├── PRACTICES.md                  checklist of hands-on practices (+ hints)
 ├── JOURNAL.md                    session log: what we did, what we found
 ├── vitest.config.mts             runs only learning/**/*.spec.ts
@@ -54,7 +58,8 @@ learning/
 │   ├── 03-provider-scopes.spec.ts
 │   ├── 04-request-lifecycle.spec.ts
 │   ├── 05-lifecycle-hooks.spec.ts
-│   └── 06-triage-issue-18052.spec.ts
+│   ├── 06-triage-issue-18052.spec.ts
+│   └── 07-dependency-lookup.spec.ts
 └── exercises/
     └── exercises.spec.ts         E1–E4, skipped until you solve them
 ```

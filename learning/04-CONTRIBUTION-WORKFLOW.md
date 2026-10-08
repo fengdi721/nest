@@ -69,7 +69,7 @@ gh pr create --repo nestjs/nest --base master   # fill the template!
 ### Commit message (enforced by `.commitlintrc.json` + `.husky/commit-msg`)
 
 ```
-<type>(<scope>): <subject, imperative, ≤100 chars total>
+<type>(<scope>): <subject, imperative, header ≤ 72 chars>
 
 <body: WHY, not what. What was broken, what changes.>
 
@@ -78,6 +78,9 @@ Closes #18052
 
 - type: `fix feat docs test refactor perf chore build ci style revert sample`
 - scope = package: `common core microservices express fastify socket.io ws testing websockets sample`
+- Header ≤ **72** chars (enforced by `@commitlint/config-angular`), even though
+  CONTRIBUTING.md says 100: the tool wins. Subject must be one consistent case:
+  avoid mixing in UPPER_CASE identifiers.
 - Look at `git log --oneline` for real examples.
 
 ### The PR description (`.github/PULL_REQUEST_TEMPLATE.md`)
