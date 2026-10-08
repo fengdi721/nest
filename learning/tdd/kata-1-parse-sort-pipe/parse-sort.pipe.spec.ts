@@ -71,5 +71,12 @@ describe('ParseSortPipe', () => {
         'Duplicate sort field "name"',
       );
     });
+
+    it.each(['name,,age', ':desc', 'name, '])(
+      'should reject an empty field name in %j',
+      value => {
+        expect(() => pipe.transform(value)).toThrow('Empty sort field');
+      },
+    );
   });
 });
