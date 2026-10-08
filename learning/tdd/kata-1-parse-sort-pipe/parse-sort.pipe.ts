@@ -19,6 +19,9 @@ export class ParseSortPipe implements PipeTransform<string, SortField[]> {
     const seen = new Set<string>();
     return value.split(',').map(part => {
       const [field, order = 'asc'] = part.split(':').map(s => s.trim());
+      if (!field) {
+        throw new BadRequestException(`Empty sort field in "${value}"`);
+      }
       if (order !== 'asc' && order !== 'desc') {
         throw new BadRequestException(
           `Invalid sort direction "${order}" for field "${field}"`,
