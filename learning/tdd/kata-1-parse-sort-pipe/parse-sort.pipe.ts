@@ -16,6 +16,7 @@ export class ParseSortPipe implements PipeTransform<string, SortField[]> {
     if (!value?.trim()) {
       return [];
     }
+    const seen = new Set<string>();
     return value.split(',').map(part => {
       const [field, order = 'asc'] = part.split(':').map(s => s.trim());
       if (order !== 'asc' && order !== 'desc') {
@@ -27,6 +28,10 @@ export class ParseSortPipe implements PipeTransform<string, SortField[]> {
       if (allowedFields && !allowedFields.includes(field)) {
         throw new BadRequestException(`Sorting by "${field}" is not allowed`);
       }
+      if (seen.has(field)) {
+        throw new BadRequestException(`Duplicate sort field "${field}"`);
+      }
+      seen.add(field);
       return { field, order };
     });
   }
