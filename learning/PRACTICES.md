@@ -100,3 +100,16 @@ Tick each box as you finish it, and commit the change to this file
       `packages/core/test/injector/module.spec.ts`、
       `integration/hello-world/e2e/guards.spec.ts`。记下 3 个以后会用的写法。
 - [ ] **P25. 把 TDD 用到工作里。** 下次在工作项目里新加接口或修 bug 时，先写失败的测试。
+
+## 第七阶段：评审与提 PR（配合 07 文档）
+
+- [ ] **P26. 读懂我的评审。** 照着 07 文档第二节的 7 个步骤，自己把 #18053 重新评审一遍
+      （分支 `review/pr-18053` 已经在本地）。看看能不能找到我没发现的问题。
+- [ ] **P27. 决定评审意见。** 修改 07 文档里的评审草稿，决定发还是不发。
+      如果发，在 PR 页面粘贴即可。发之前先看看这时有没有维护者已经评论过。
+- [ ] **P28. 决定演练 PR 的去向。** 读 https://github.com/fengdi721/nest/pull/1 ，
+      决定是否提交到 nestjs/nest（命令在 07 文档第四节）。提交后的每一次互动都记进 JOURNAL.md。
+- [ ] **P29. 自己走一遍全流程：P18。** 为属性注入的报错文案补测试，完全按照 07 文档第三节的
+      7 个步骤做，先在自己的 fork 上开 PR。写完后让 Claude 评审。
+- [ ] **P30. 评审一个别人的 PR。** `gh pr list --repo nestjs/nest` 找一个你感兴趣的 PR，
+      按第二节的步骤评审，把结论写进 JOURNAL.md（可以不发）。

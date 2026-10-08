@@ -159,3 +159,35 @@ An upstream suite was also run as a sanity check:
 
 - P19–P23：回放 kata 1 → 自己重做 → 完成 kata 2 → 对 kata 2 做变异测试。
 - 完成后让 Claude 做 code review；然后回到 P18（第一个上游 PR）。
+
+---
+
+## 第 4 次学习：2026-10-09：评审真实 PR + 提 PR 演练
+
+### 插曲（题外问题）
+
+- 依赖安装：本仓库要用 `npm ci --legacy-peer-deps`。Node 版本只要 ≥ 20 即可（CI 测试的是 20.19 / 22.14 / 24.1），装不上的原因是 peer dependency 冲突，和 Node 版本无关。
+- 真实冲突的例子：仓库装的是 `graphql@17.0.2`，而 `@apollo/server` 的 peer 要求 `^16.11.0`（用 `npm ls --all | grep invalid` 查到）。
+- 不要用 yarn：仓库只有 `package-lock.json`，CI 用的是 npm。
+
+### 做了什么
+
+1. **查重改变了计划**：原计划给 `FastifyAdapter.listen()` 补测试，发现 PR #18053 已经加了 8 个 → 改为评审它。
+2. **本地评审 #18053**：CI 全绿；和最新 master 无冲突（落后 12 个提交）；单元 8/8、e2e 3/3 通过；
+   第 06 课的复现测试翻转（`it.fails` 报 `Expect test to fail`）；4 个变异全部被抓到。
+3. **边界对比**：写小脚本对比 Node `net.listen` 和 PR 的规则，只有 `"-1"` 不一致 → 记为 nit。
+   评审意见草稿写在 07 文档里，**没有发出**，由我决定。
+4. **提 PR 演练**：CONTRIBUTING 有两处和工具不一致（代码宽度 100 vs Prettier 实际 80；
+   提交标题 100 vs commitlint 实际 72）。从 `upstream/master` 开分支 `docs/contributing-tooling-limits`，
+   用工具实测验证后提交，推到 fork，开了 PR：https://github.com/fengdi721/nest/pull/1 （只改 1 个文件）。
+
+### 发现 / 体会
+
+- 上游最近 500 个提交里有 101 个标题超过 72 个字符，原因是 squash 合并时加上了 ` (#1234)`。看起来和规则矛盾，其实并不冲突。
+- 文档和工具不一致时，有两种修法（改文档或改配置）。选影响最小的那种，并把另一种写进 PR 描述，让维护者决定。
+- `it.fails` 的设计在真实场景里起了作用：修复一出现，测试就提醒了。
+
+### 下一步
+
+- P26–P30：自己评审一遍 #18053；决定评审意见和演练 PR 的去向；用同样的流程完成 P18。
+- kata 2 仍待完成（P21–P23）。

@@ -20,6 +20,7 @@ upstream PR; real contributions go on their own branches cut from a fresh
 | 4   | [04-CONTRIBUTION-WORKFLOW.md](04-CONTRIBUTION-WORKFLOW.md): fork → branch → commit → PR → review | `specs/06` (real issue triage), P10–P14   |
 | 5   | [05-DI-LOOKUP-AND-DEBUG.md](05-DI-LOOKUP-AND-DEBUG.md) (中文): 从报错倒推源码、依赖查找算法、`NEST_DEBUG` | `specs/07`, P15–P18 |
 | 6   | [06-TDD-AND-TESTING.md](06-TDD-AND-TESTING.md) (中文): 写测试与 TDD：AAA、红绿重构、测试替身、变异测试 | `tdd/kata-1` 回放，`tdd/kata-2` 自己做，P19–P25 |
+| 7   | [07-REVIEW-AND-PR-REHEARSAL.md](07-REVIEW-AND-PR-REHEARSAL.md) (中文): 评审真实 PR #18053 + 在自己 fork 上完整演练提 PR | P26–P30 |
 | ∞   | [JOURNAL.md](JOURNAL.md): log of every session, finding and test written | keep adding to it                                  |
 
 ## Running everything
@@ -51,6 +52,7 @@ learning/
 ├── 04-CONTRIBUTION-WORKFLOW.md   git/GitHub process, conventions, etiquette
 ├── 05-DI-LOOKUP-AND-DEBUG.md     (中文) 从报错倒推源码 / 依赖查找 / NEST_DEBUG
 ├── 06-TDD-AND-TESTING.md         (中文) 写测试与 TDD
+├── 07-REVIEW-AND-PR-REHEARSAL.md (中文) 评审 PR + 提 PR 演练
 ├── PRACTICES.md                  checklist of hands-on practices (+ hints)
 ├── JOURNAL.md                    session log: what we did, what we found
 ├── vitest.config.mts             runs only learning/**/*.spec.ts
