@@ -120,3 +120,42 @@ An upstream suite was also run as a sanity check:
 ### 下一步
 
 - 完成 P15–P18；P18 做完后一起检查，再决定是否向 nestjs/nest 提交真正的 PR。
+
+---
+
+## 第 3 次学习：2026-10-08：写测试与 TDD
+
+### 背景
+
+我没有写测试和 TDD 的经验，这一步专门练习。
+
+### 做了什么
+
+1. **Kata 1（演示）**：用 TDD 从零实现 `ParseSortPipe`（解析 `?sort=name:asc,age:desc`）。
+   9 轮红/绿 + 1 次重构 + 1 个集成测试，共 20 个提交，每个提交都能单独 `git show` 回看。
+2. **手动变异测试**：故意改坏 6 处代码，6 处都被测试抓到。
+3. **Kata 2（练习）**：Cats CRUD 的骨架 + 测试清单（`it.todo`），每个文件给一个写好的模板测试。
+   用一份参考实现验证过需求都能做通，然后删掉了参考实现。
+
+### 产出的测试
+
+| 文件 | 测试数 | 说明 |
+| --- | --- | --- |
+| `tdd/kata-1-parse-sort-pipe/parse-sort.pipe.spec.ts` | 14 | 单元测试，TDD 逐个加出来 |
+| `tdd/kata-1-parse-sort-pipe/parse-sort.pipe.e2e.spec.ts` | 3 | 真实 controller + supertest |
+| `tdd/kata-2-cats-crud/cats.service.spec.ts` | 1 + 11 todo | 模板：AAA + mock repository |
+| `tdd/kata-2-cats-crud/cats.e2e.spec.ts` | 1 + 8 todo | 模板：fake repository + supertest |
+
+全部学习测试：`47 passed | 1 expected fail | 4 skipped | 19 todo`。
+
+### 发现 / 体会
+
+- **红要红得正确**：第一轮先写一个返回 `undefined` 的空类，让失败是断言失败而不是 import 失败。
+- **第 9 轮来自主动思考边界**：`'name,,age'` 会产生空字段名，需求里没写，是 TDD 的“还有什么输入会出错”的习惯发现的。
+- **重构有底气**：重构改动很大，但 14 个测试一直是绿的。
+- **变异测试**是检验测试质量最直观的方法：改坏代码，测试必须变红。
+
+### 下一步
+
+- P19–P23：回放 kata 1 → 自己重做 → 完成 kata 2 → 对 kata 2 做变异测试。
+- 完成后让 Claude 做 code review；然后回到 P18（第一个上游 PR）。

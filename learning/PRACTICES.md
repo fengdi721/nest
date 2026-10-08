@@ -85,3 +85,18 @@ Tick each box as you finish it, and commit the change to this file
       5. 推到自己的 fork，**向自己 fork 的 master** 开 PR 演练一遍模板
       6. 先 `gh pr list --repo nestjs/nest --search "messages.spec"` 确认没人在做，
          然后再决定是否向上游提交（下一步一起做）
+
+## 第六阶段：写测试与 TDD（配合 06 文档 + learning/tdd）
+
+- [ ] **P19. 回放 kata 1。** 用 `git log --reverse --oneline -- learning/tdd/kata-1-parse-sort-pipe`
+      逐个 `git show` 红/绿提交。每一轮先**猜**绿提交会怎么改，再看答案。
+- [ ] **P20. 自己重做 kata 1。** 新建 `learning/tdd/my-kata-1/`，不看答案，从第一个测试开始
+      重新 TDD 一遍 `ParseSortPipe`。完成后和我的版本对比，写下差异到 JOURNAL.md。
+- [ ] **P21. 完成 kata 2 单元测试**（`cats.service.spec.ts`，11 个 todo），每个红/绿各一次提交。
+- [ ] **P22. 完成 kata 2 e2e**（`cats.e2e.spec.ts`，8 个 todo），并补齐 controller 路由。
+- [ ] **P23. 给 kata 2 做变异测试。** 至少改坏 5 处（例如删掉 `trim()`、把 `< 0` 改成 `<= 0`、
+      删掉 `findOne` 检查），记录哪些被测试抓到、哪些没有；没抓到的补测试。
+- [ ] **P24. 读 3 个上游 spec 学写法：** `packages/common/test/pipes/parse-int.pipe.spec.ts`、
+      `packages/core/test/injector/module.spec.ts`、
+      `integration/hello-world/e2e/guards.spec.ts`。记下 3 个以后会用的写法。
+- [ ] **P25. 把 TDD 用到工作里。** 下次在工作项目里新加接口或修 bug 时，先写失败的测试。
