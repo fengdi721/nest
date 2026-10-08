@@ -1,41 +1,70 @@
-import { BadRequestException, PipeTransform } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  Optional,
+  PipeTransform,
+} from '@nestjs/common';
+
+export type SortOrder = 'asc' | 'desc';
 
 export interface SortField {
   field: string;
-  order: 'asc' | 'desc';
+  order: SortOrder;
 }
 
 export interface ParseSortPipeOptions {
+  /** When set, only these fields may be sorted on (400 otherwise). */
   allowedFields?: string[];
 }
 
-export class ParseSortPipe implements PipeTransform<string, SortField[]> {
-  constructor(private readonly options: ParseSortPipeOptions = {}) {}
+const SORT_ORDERS: readonly string[] = ['asc', 'desc'];
+
+/**
+ * Parses `?sort=name:asc,createdAt:desc` into
+ * `[{ field: 'name', order: 'asc' }, { field: 'createdAt', order: 'desc' }]`.
+ */
+@Injectable()
+export class ParseSortPipe implements PipeTransform<
+  string | undefined,
+  SortField[]
+> {
+  constructor(
+    @Optional() private readonly options: ParseSortPipeOptions = {},
+  ) {}
 
   transform(value: string | undefined): SortField[] {
     if (!value?.trim()) {
       return [];
     }
+    const fields = value.split(',').map(part => this.parsePart(part, value));
+    this.assertNoDuplicates(fields);
+    return fields;
+  }
+
+  private parsePart(part: string, value: string): SortField {
+    const [field, order = 'asc'] = part.split(':').map(token => token.trim());
+    if (!field) {
+      throw new BadRequestException(`Empty sort field in "${value}"`);
+    }
+    if (!SORT_ORDERS.includes(order)) {
+      throw new BadRequestException(
+        `Invalid sort direction "${order}" for field "${field}"`,
+      );
+    }
+    const { allowedFields } = this.options;
+    if (allowedFields && !allowedFields.includes(field)) {
+      throw new BadRequestException(`Sorting by "${field}" is not allowed`);
+    }
+    return { field, order: order as SortOrder };
+  }
+
+  private assertNoDuplicates(fields: SortField[]) {
     const seen = new Set<string>();
-    return value.split(',').map(part => {
-      const [field, order = 'asc'] = part.split(':').map(s => s.trim());
-      if (!field) {
-        throw new BadRequestException(`Empty sort field in "${value}"`);
-      }
-      if (order !== 'asc' && order !== 'desc') {
-        throw new BadRequestException(
-          `Invalid sort direction "${order}" for field "${field}"`,
-        );
-      }
-      const { allowedFields } = this.options;
-      if (allowedFields && !allowedFields.includes(field)) {
-        throw new BadRequestException(`Sorting by "${field}" is not allowed`);
-      }
+    for (const { field } of fields) {
       if (seen.has(field)) {
         throw new BadRequestException(`Duplicate sort field "${field}"`);
       }
       seen.add(field);
-      return { field, order };
-    });
+    }
   }
 }
