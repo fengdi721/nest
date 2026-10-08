@@ -1,3 +1,4 @@
+import { BadRequestException } from '@nestjs/common';
 import { ParseSortPipe } from './parse-sort.pipe';
 
 describe('ParseSortPipe', () => {
@@ -31,5 +32,12 @@ describe('ParseSortPipe', () => {
         { field: 'age', order: 'asc' },
       ]);
     });
+
+    it.each([undefined, '', '   '])(
+      'should return an empty list when the value is %j',
+      value => {
+        expect(pipe.transform(value as any)).toEqual([]);
+      },
+    );
   });
 });
