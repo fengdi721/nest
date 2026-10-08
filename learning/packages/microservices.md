@@ -1,6 +1,7 @@
 # @nestjs/microservices 贡献教程
 
 > 配套测试：`learning/specs/packages/microservices.spec.ts`（9 个，用真实 TCP 通信）
+> 本篇还包含一个变异测试暴露盲区的案例（第 4 节末尾）
 > 练习：`PRACTICES.md` 第八阶段 · microservices
 
 ## 1. 一句话定位
@@ -85,6 +86,28 @@ ClientTCP 按 id 找到对应的请求，把值推给 Observable
   上游的 integration 测试直接用默认端口，所以必须串行运行（`fileParallelism: false`）。
 - **`vi.waitFor()`**：事件没有回复，只能轮询检查副作用，不能用固定的 `sleep`。
 - **`toArray()`**：把 Observable 的多个值收集成数组再断言。
+
+### 变异测试暴露的盲区：为什么既要集成测试，也要单元测试
+
+验证练习 P49 时，我把 `server-tcp.ts` 里“没有 id 就是事件”的判断改成了 `if (false)`：
+
+| 测试 | 结果 |
+| --- | --- |
+| 本课的学习测试（真实 TCP） | **9 个全部通过**，变异没被抓到 |
+| 上游 `test/server/server-tcp.spec.ts` | **1 个失败**：`should call "handleEvent" if ... identifier is not present` |
+
+**为什么学习测试抓不到？** 改坏之后，`emit()` 发出的事件会走请求的处理路径，事件处理器照样执行，副作用（`received` 数组）照样出现。
+从外部看，行为没有变化；唯一的区别是服务端多发了一个没人接收的响应包。
+
+**上游单元测试为什么能抓到？** 它用 `vi.spyOn(server, 'handleEvent')` 直接断言“走了事件路径”。
+
+| | 集成测试（本课） | 单元测试（上游） |
+| --- | --- | --- |
+| 能看到 | 外部可见的行为 | 内部走了哪条路径 |
+| 优点 | 接近真实使用，重构内部实现时不容易误报 | 精确，能发现“行为碰巧一样，但路径错了”的问题 |
+| 缺点 | 看不到内部 | 和实现细节绑定，重构时要跟着改 |
+
+→ 这就是为什么上游的修复通常**同时**带单元测试和 e2e 测试（03 文档）。
 
 ## 5. 上游测试在哪里、怎么跑
 

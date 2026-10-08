@@ -21,6 +21,7 @@ upstream PR; real contributions go on their own branches cut from a fresh
 | 5   | [05-DI-LOOKUP-AND-DEBUG.md](05-DI-LOOKUP-AND-DEBUG.md) (中文): 从报错倒推源码、依赖查找算法、`NEST_DEBUG` | `specs/07`, P15–P18 |
 | 6   | [06-TDD-AND-TESTING.md](06-TDD-AND-TESTING.md) (中文): 写测试与 TDD：AAA、红绿重构、测试替身、变异测试 | `tdd/kata-1` 回放，`tdd/kata-2` 自己做，P19–P25 |
 | 7   | [07-REVIEW-AND-PR-REHEARSAL.md](07-REVIEW-AND-PR-REHEARSAL.md) (中文): 评审真实 PR #18053 + 在自己 fork 上完整演练提 PR | P26–P30 |
+| 8   | [packages/README.md](packages/README.md) (中文): **9 个 package 逐个的贡献教程**，每个都有测试和练习 | `specs/packages/*`，P31–P50 |
 | ∞   | [JOURNAL.md](JOURNAL.md): log of every session, finding and test written | keep adding to it                                  |
 
 ## Running everything
@@ -53,6 +54,7 @@ learning/
 ├── 05-DI-LOOKUP-AND-DEBUG.md     (中文) 从报错倒推源码 / 依赖查找 / NEST_DEBUG
 ├── 06-TDD-AND-TESTING.md         (中文) 写测试与 TDD
 ├── 07-REVIEW-AND-PR-REHEARSAL.md (中文) 评审 PR + 提 PR 演练
+├── packages/                     (中文) 9 个 package 的贡献教程（README.md 是总览）
 ├── PRACTICES.md                  checklist of hands-on practices (+ hints)
 ├── JOURNAL.md                    session log: what we did, what we found
 ├── vitest.config.mts             runs only learning/**/*.spec.ts
@@ -63,7 +65,8 @@ learning/
 │   ├── 04-request-lifecycle.spec.ts
 │   ├── 05-lifecycle-hooks.spec.ts
 │   ├── 06-triage-issue-18052.spec.ts
-│   └── 07-dependency-lookup.spec.ts
+│   ├── 07-dependency-lookup.spec.ts
+│   └── packages/                 每个 package 一个测试文件（9 个）
 ├── exercises/
 │   └── exercises.spec.ts         E1–E4, skipped until you solve them
 └── tdd/

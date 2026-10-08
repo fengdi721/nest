@@ -113,3 +113,57 @@ Tick each box as you finish it, and commit the change to this file
       7 个步骤做，先在自己的 fork 上开 PR。写完后让 Claude 评审。
 - [ ] **P30. 评审一个别人的 PR。** `gh pr list --repo nestjs/nest` 找一个你感兴趣的 PR，
       按第二节的步骤评审，把结论写进 JOURNAL.md（可以不发）。
+
+## 第八阶段：逐个 package 的贡献练习（配合 learning/packages/）
+
+> 总览：[packages/README.md](packages/README.md)。每个 package 一个小节：先读教程，再跑测试，最后做练习。
+> 每一节的第 1 个练习都是“跑通 + 改坏”：把教程里的测试跑通，然后改坏被测的源码，确认测试会失败（06 文档第四节的方法）。
+
+### testing · [教程](packages/testing.md) · 测试 `specs/packages/testing.spec.ts`
+
+- [ ] **P31.** 跑通测试；把 `testing-injector.ts` 的 `catch` 里改成直接 `throw err`，确认 `useMocker` 测试失败。
+- [ ] **P32.** 从头到尾读完 `packages/testing` 的 531 行源码，在 JOURNAL.md 写出 `compile()` 和 `NestFactory.create()` 的 3 个区别。
+- [ ] **P33.** 为 `CapturingLogger` 的颜色码问题写一份 issue 草稿（不发出），附上本课测试作为最小复现。
+
+### common · [教程](packages/common.md) · 测试 `specs/packages/common.spec.ts`
+
+- [ ] **P34.** 跑通测试；把 `optional.decorator.ts` 属性分支的 `getMetadata` 改回 `getOwnMetadata`，跑上游 `packages/common/test/decorators/optional.decorator.spec.ts`，看 #17944 的测试变红。
+- [ ] **P35.** 用第 4 节的方法调查 `@UseGuards`：父类 controller 和子类各加一个 guard，两个都会执行吗？写成测试。
+- [ ] **P36.** 给 `ValidationPipe` 的一个选项组合（如 `groups` + `transform`）写学习测试，再对照上游 `validation.pipe.spec.ts` 看是否已被覆盖。
+
+### core · [教程](packages/core.md) · 测试 `specs/packages/core.spec.ts`
+
+- [ ] **P37.** 跑通测试；在 `route-info-path-extractor.ts` 的 `extractVersionPathFrom` 里，未写 version 时改用 `defaultVersion`，看“当前行为”测试是否翻转，再跑上游 `packages/core/test/middleware` 看会不会破坏其他测试。**做完还原。**
+- [ ] **P38.** 决定是否为“URI 版本控制下 exclude 静默失效”开 issue；写好草稿，附上教程第 5 节的两张对照表。
+- [ ] **P39.** 把对照实验扩展到 HEADER 版本控制，记录结果。
+
+### platform-express · [教程](packages/platform-express.md) · 测试 `specs/packages/platform-express.spec.ts`
+
+- [ ] **P40.** 跑通测试；把 `multer.utils.ts` 的 `LIMIT_FILE_SIZE` 映射改成 `BadRequestException`，看 413 测试变红。
+- [ ] **P41.** 找一个 renovate 机器人开的依赖升级 PR（`gh pr list --repo nestjs/nest --author app/renovate`），按 07 文档的方法评审它：升级会改变 Nest 的行为吗？
+
+### platform-fastify · [教程](packages/platform-fastify.md) · 测试 `specs/packages/platform-fastify.spec.ts`
+
+- [ ] **P42.** 跑通测试；重现教程第 5 节的修复思路，亲眼看到两个测试同时翻转，然后还原。
+- [ ] **P43.** **为 `@RouteSchema` 返回 500 的 bug 开 issue**（你的第一个真实 issue 候选）：先再查一次重，然后按教程第 5 节的结构写。
+- [ ] **P44.** 扩展“一致性”测试：再找 2 个 express 和 fastify 的行为对比（例如 CORS、`HEAD` 请求），记录结果。
+
+### websockets · [教程](packages/websockets.md) · 测试 `specs/packages/websockets.spec.ts`
+
+- [ ] **P45.** 跑通测试；把 `web-sockets-controller.ts` 第 205 行的 `this.createStaticEventHandler(instance, moduleKey, 'handleConnection')` 换成 `undefined`，确认生命周期测试变红（已验证会变红）。做完还原。
+- [ ] **P46.** 给 `learning/` 加类型检查：写一个 `learning/tsconfig.json` 并运行 `npx tsc --noEmit -p learning`，看能不能提前发现“从公共入口导入不存在的常量”这类问题。
+
+### platform-socket.io · [教程](packages/platform-socket.io.md) · 测试 `specs/packages/platform-socket.io.spec.ts`
+
+- [ ] **P47.** 完整读一遍 `io-adapter.ts`（128 行），回答教程第 5 节留下的两个“横向对比”问题，并写成测试。
+
+### platform-ws · [教程](packages/platform-ws.md) · 测试 `specs/packages/platform-ws.spec.ts`
+
+- [ ] **P48.** 对照教程第 2 节表格里的每个设计决策，检查上游 `packages/platform-ws/test` 有没有对应的单元测试；缺哪个，就像 `test(ws): cover the message handler binding failure paths` 那样补一个（先在自己的 fork 上开 PR）。
+
+### microservices · [教程](packages/microservices.md) · 测试 `specs/packages/microservices.spec.ts`
+
+- [ ] **P49.** 在 `server-tcp.ts` 第 130 行把 `if (isUndefined((packet as IncomingRequest).id))` 改成 `if (false)`：
+      先跑**学习测试**（全绿：这是一个盲区），再跑上游 `packages/microservices/test/server/server-tcp.spec.ts`（变红）。
+      读 microservices 教程第 4 节，用自己的话解释为什么会这样，写进 JOURNAL.md。做完还原。
+- [ ] **P50.** 挑一个最近的 microservices 修复（例如 `3965882fe` 的 kafka deserializer 错误），用“横向对比”检查其他传输层的客户端有没有同样的问题，结论写进 JOURNAL.md。

@@ -191,3 +191,59 @@ An upstream suite was also run as a sanity check:
 
 - P26–P30：自己评审一遍 #18053；决定评审意见和演练 PR 的去向；用同样的流程完成 P18。
 - kata 2 仍待完成（P21–P23）。
+
+---
+
+## 第 5 次学习：2026-10-09：9 个 package 的贡献教程（`/goal`）
+
+### 目标
+
+用 `/goal` 设定：为仓库的每一个 package 写贡献教程和对应的测试，并在 PRACTICES.md 中覆盖。
+
+### 产出
+
+| Package | 教程 | 测试数 |
+| --- | --- | --- |
+| common | `packages/common.md` | 16 |
+| core | `packages/core.md` | 10 |
+| microservices | `packages/microservices.md` | 9 |
+| websockets | `packages/websockets.md` | 10 |
+| platform-express | `packages/platform-express.md` | 10 |
+| platform-fastify | `packages/platform-fastify.md` | 9 + 1 `it.fails` |
+| platform-socket.io | `packages/platform-socket.io.md` | 3 |
+| platform-ws | `packages/platform-ws.md` | 6 |
+| testing | `packages/testing.md` | 9 |
+
+总览：`packages/README.md`；练习：`PRACTICES.md` 第八阶段 P31–P50。
+
+### 两个真实、未被报告的问题（待我决定是否开 issue）
+
+1. 🐛 **fastify：`@RouteSchema` 校验失败返回 500 而不是 400。** 纯 fastify 返回 400；Nest 的 `isHttpError` /
+   `isHttpFastifyError` 都要求错误名为 `FastifyError`，而 fastify 的校验错误是普通 `Error`。
+   本地验证了修复思路（两个测试翻转，上游 463 个测试通过），已还原。→ P43
+2. 🔎 **core：URI 版本控制下，不带 `version` 的中间件 `exclude` 静默失效。** 用 6 + 3 种配置的对照实验
+   定位到 `route-info-path-extractor.ts` 的 `extractVersionPathFrom`。官方文档没提 exclude 和版本的关系。→ P38
+
+### 一个低优先级问题
+
+- `CapturingLogger` 匹配不到注入器调试日志，因为颜色码被拼进了消息文本（`NO_COLOR=1` 可绕过）。→ P33
+
+### 核对过、不是 bug 的地方（避免以后重复检查）
+
+- common：`@Optional()` 参数分支的 `getOwnMetadata` 是有意为之（`getConstructorOwner` 的注释解释了原因）。
+- express：busboy 错误仍按文案匹配，因为 busboy 1.6.0 的错误没有 code。
+- socket.io / ws：两个适配器都处理了“编码失败不能让进程崩溃”。
+
+### 写测试时被纠正的理解
+
+- microservices：`send()` 的 data 不能为 `null`；“找不到处理器”返回纯字符串，而 `RpcException` 返回对象。
+- websockets：常量不在公共入口，vitest 不做类型检查，所以导入得到 `undefined` 却不报错。
+- platform-ws：处理器抛错先被 websockets 层捕获，变成 `exception` 事件，非 `WsException` 的错误信息被隐藏。
+- testing：override 是原地替换，`useFactory` 的 `inject` 在原模块里解析。
+- express：自己踩中了 multer 文案变化（#17769 修复的正是这个问题）。
+- core：两个 403 是我测试里漏带了请求头，先怀疑测试本身。
+
+### 用变异测试检验练习本身
+
+把“改坏源码 → 测试变红”类练习（P31、P34、P40、P45、P49）都实际跑了一遍。P49 的变异**没有**被学习测试抓到，
+却被上游单元测试抓到了。由此在 microservices 教程里补了一节“为什么既要集成测试，也要单元测试”。
