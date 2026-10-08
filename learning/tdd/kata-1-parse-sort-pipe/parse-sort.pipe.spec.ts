@@ -39,5 +39,12 @@ describe('ParseSortPipe', () => {
         expect(pipe.transform(value as any)).toEqual([]);
       },
     );
+
+    it('should reject an unknown direction with a 400', () => {
+      expect(() => pipe.transform('name:up')).toThrow(BadRequestException);
+      expect(() => pipe.transform('name:up')).toThrow(
+        'Invalid sort direction "up" for field "name"',
+      );
+    });
   });
 });
