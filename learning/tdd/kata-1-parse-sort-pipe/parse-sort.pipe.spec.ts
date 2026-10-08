@@ -24,5 +24,12 @@ describe('ParseSortPipe', () => {
         { field: 'createdAt', order: 'desc' },
       ]);
     });
+
+    it('should ignore whitespace around fields and directions', () => {
+      expect(pipe.transform(' name : desc , age ')).toEqual([
+        { field: 'name', order: 'desc' },
+        { field: 'age', order: 'asc' },
+      ]);
+    });
   });
 });
