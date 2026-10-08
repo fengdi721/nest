@@ -59,6 +59,13 @@ An upstream suite was also run as a sanity check:
 - Root cause of #18052: `options = { port: +listenOptions }` for every non-object
   argument (`packages/platform-fastify/adapters/fastify-adapter.ts`, `listen()`).
 
+- **The git hooks in action** (on the first commit of this notebook):
+  `pre-commit` ran prettier on the staged `.ts` files, and `commit-msg` ran
+  commitlint, which warned `scope must be one of [common, core, …]` because
+  `learning` is not a package. It is a warning (rule level `1` in
+  `.commitlintrc.json`), not an error (`2`), so the commit passed. In a real
+  upstream PR, use a real package scope.
+
 ### Next session
 
 - Do P1–P6, then solve E1–E4.
