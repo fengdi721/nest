@@ -7,7 +7,7 @@ export interface SortField {
 
 export class ParseSortPipe implements PipeTransform<string, SortField[]> {
   transform(value: string): SortField[] {
-    // "Fake it": the simplest thing that makes the only test pass.
-    return [{ field: value, order: 'asc' }];
+    const [field, order = 'asc'] = value.split(':');
+    return [{ field, order: order as SortField['order'] }];
   }
 }
